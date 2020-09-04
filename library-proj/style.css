@@ -1,1 +1,35 @@
-/*todo*/
+:root {
+  --section-width: 700px;
+  --padding-size: 10px;
+  --grid-size: calc(var(--section-width) * 0.325);
+}
+
+body {
+  color: #222222;
+  font-family: 'Proxima Nova', 'Helvetica', 'Arial', sans-serif;
+  font-size: 18px;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  border-bottom: 1px solid #cccccc;
+  height: 80px;
+}
+
+#content {
+  width: var(--section-width);
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.book {
+  border-width: 2px;
+  border-color: red;
+  border-style: dashed;
+
+  width: var(--grid-size);
+  height: var(--grid-size);
+}
