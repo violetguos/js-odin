@@ -1,0 +1,23 @@
+{
+  "name": "resto",
+  "version": "1.0.0",
+  "description": "resto practice proj",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/violetguos/js-odin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/violetguos/js-odin/issues"
+  },
+  "homepage": "https://github.com/violetguos/js-odin#readme",
+  "devDependencies": {
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
+}
