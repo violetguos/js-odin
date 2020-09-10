@@ -2,34 +2,40 @@
   --section-width: 700px;
   --padding-size: 10px;
   --grid-size: calc(var(--section-width) * 0.325);
+  --margin-book-bottom: 20px;
 }
 
 body {
   color: #222222;
   font-family: 'Proxima Nova', 'Helvetica', 'Arial', sans-serif;
   font-size: 18px;
-  margin: 0;
+  margin: auto;
+  width: var(--section-width);
 }
 
 header {
-  display: flex;
+  /*display: flex;*/
   border-bottom: 1px solid #cccccc;
   height: 80px;
 }
 
 #content {
-  width: var(--section-width);
-  margin: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .book {
-  border-width: 2px;
-  border-color: red;
-  border-style: dashed;
-
+  border: 1px red;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
   width: var(--grid-size);
   height: var(--grid-size);
+  padding: var(--padding-size);
+  margin-bottom: var(--margin-book-bottom);
+}
+
+/*remove book button*/
+.removeBook {
+  height: 10px;
 }
