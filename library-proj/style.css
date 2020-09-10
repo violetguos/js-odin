@@ -39,3 +39,8 @@ header {
 .removeBook {
   height: 10px;
 }
+
+/*input form*/
+form {
+  display: none;
+}

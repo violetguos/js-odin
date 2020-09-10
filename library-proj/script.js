@@ -2,7 +2,7 @@ let myLibrary = [];
 
 function Book(title, read, author, numberOfPages) {
   this.title = title;
-  this.read = read;
+  this.read = read == 'y' ? true : false;
   this.author = author;
   this.numberOfPages = numberOfPages;
 
@@ -49,11 +49,26 @@ function Book(title, read, author, numberOfPages) {
 }
 
 function addBookToLibrary() {
-  const book = new Book('Catcher of the rye', true, 'J. D. Salinger', 200);
-  myLibrary.push(book);
-  book.display();
+  const form = document.querySelector('form');
+  form.style.display = 'block';
+  // const book = new Book('Catcher of the rye', true, 'J. D. Salinger', 200);
 }
 
 // main
 const newBookButton = document.querySelector('.newBook');
 newBookButton.addEventListener('click', addBookToLibrary);
+const form = document.getElementsByTagName('form')[0];
+
+form.addEventListener('submit', function (event) {
+  const book = new Book(
+    form.title.value,
+    form.read.value,
+    form.author.value,
+    form.page.value
+  );
+  myLibrary.push(book);
+
+  book.display();
+
+  event.preventDefault();
+});
