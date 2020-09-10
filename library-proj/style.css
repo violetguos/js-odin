@@ -17,6 +17,7 @@ header {
   /*display: flex;*/
   border-bottom: 1px solid #cccccc;
   height: 80px;
+  margin-bottom: 10px;
 }
 
 #content {
@@ -35,6 +36,15 @@ header {
   margin-bottom: var(--margin-book-bottom);
 }
 
+/* new book button*/
+.newBook {
+  display: flex;
+  margin: auto;
+
+  width: fit-content;
+  padding: var(--padding-size);
+}
+
 /*remove book button*/
 .removeBook {
   height: 10px;
@@ -43,4 +53,6 @@ header {
 /*input form*/
 form {
   display: none;
+  padding: var(--padding-size);
+  border-bottom: 1px solid #cccccc;
 }

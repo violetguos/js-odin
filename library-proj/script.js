@@ -71,4 +71,6 @@ form.addEventListener('submit', function (event) {
   book.display();
 
   event.preventDefault();
+
+  form.style.display = 'none';
 });
