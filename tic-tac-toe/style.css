@@ -1,0 +1,31 @@
+:root {
+  --section-width: 300px;
+  --margin-width: 10px;
+  --square-width: calc((var(--section-width) / 3) - var(--margin-width));
+}
+
+body {
+  color: #222222;
+  font-family: 'Proxima Nova', 'Helvetica', 'Arial', sans-serif;
+  font-size: 18px;
+  margin: auto;
+  width: var(--section-width);
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+  background-color: ;
+}
+
+#square {
+  border: thick solid rgba(0, 0, 0, 0.5);
+  display: flex;
+  width: var(--square-width);
+  height: var(--square-width);
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+}
