@@ -9,7 +9,6 @@ class App {
       const result = document.querySelector('#result');
       result.textContent = '';
       this.board = new Board();
-      this.player = new Player();
     });
   }
 }
