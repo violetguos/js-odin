@@ -6,11 +6,11 @@ class Board {
     this._changeShape = this._changeShape.bind(this);
     this._initBoxes = this._initBoxes.bind(this);
     this._determinePlayer = this._determinePlayer.bind(this);
-
-    this.clickedBoxes = this._initBoxes();
-
+    this._disableAllSquares = this._disableAllSquares.bind(this);
     // declare vars
-    this.availableBoxes = [];
+    this.availableBoxes = this._initBoxes();
+
+    this.clickedBoxes = {};
 
     // start game
     this._enableAllSquares();
@@ -26,17 +26,44 @@ class Board {
     }
   }
 
+  _disableAllSquares() {
+    const boxesDivs = document.querySelectorAll('#square');
+    for (const box of boxesDivs) {
+      box.removeEventListener('click', this._changeShape);
+    }
+  }
+
+  _checkSquares(s1, s2, s3) {
+    if (
+      this.clickedBoxes[s1] != undefined &&
+      this.clickedBoxes[s2] != undefined &&
+      this.clickedBoxes[s3] != undefined
+    ) {
+      if (
+        this.clickedBoxes[s1].textContent ===
+          this.clickedBoxes[s2].textContent &&
+        this.clickedBoxes[s1].textContent === this.clickedBoxes[s3].textContent
+      )
+        return this.clickedBoxes[s1].textContent;
+    } else return undefined;
+  }
+
   _checkWinner() {
     // need to check which player?
-    const colBoxes = {};
-
-    for (const box of this.clickedBoxes) {
-      if (colBoxes[box.dataset.col]) colBoxes[box.dataset.col] += 1;
-      else colBoxes[box.dataset.col] = 1;
+    let winner;
+    // check rows
+    for (let i = 0; i < 3; i++) {
+      winner = this._checkSquares(i * 3, i * 3 + 1, i * 3 + 2);
+      if (winner != undefined) return winner;
     }
-    for (let key in colBoxes) {
-      if (colBoxes[key] == 3) console.log('winner');
+    for (let i = 0; i < 3; i++) {
+      winner = this._checkSquares(i, i + 3, i + 6);
+      if (winner != undefined) return winner;
     }
+    winner = this._checkSquares(0, 4, 8);
+    if (winner != undefined) return winner;
+    winner = this._checkSquares(2, 4, 6);
+    if (winner != undefined) return winner;
   }
 
   _changeShape(event) {
@@ -46,24 +73,32 @@ class Board {
 
     // disable clicking after one player's move
     square.style.pointerEvents = 'none';
-    this.clickedBoxes.push(square);
+    const clickedIdx =
+      parseInt(square.dataset.row * 3) + parseInt(square.dataset.col);
+    this.clickedBoxes[clickedIdx] = square;
 
     // remove from available
     const index = this.availableBoxes.indexOf(square);
     if (index > -1) {
-      availableBoxes.splice(index, 1);
+      this.availableBoxes.splice(index, 1);
     }
 
     // fire event to change player
     document.dispatchEvent(new CustomEvent('one-square-done'));
-
     // TODO: MOVE THIS
-    this._checkWinner();
+    const winner = this._checkWinner();
+    if (winner != undefined) {
+      console.log(winner);
+
+      // disbale all the boxes
+      this._disableAllSquares();
+    } else if (winner === undefined && this.availableBoxes.length === 0)
+      console.log('tie!');
   }
 
   _initBoxes() {
     // Get all buttons as a NodeList
-    const btns = document.querySelectorAll('button');
+    const btns = document.querySelectorAll('#square');
 
     // Convert buttons NodeList to an array
     const btnsArr = Array.prototype.slice.call(btns);
