@@ -6,6 +6,7 @@ class App {
       for (const box of boxesDivs) {
         box.textContent = '';
       }
+
       this.board = new Board();
       this.player = new Player();
     });

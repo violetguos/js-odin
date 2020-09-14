@@ -72,7 +72,7 @@ class Board {
     square.textContent = this.player;
 
     // disable clicking after one player's move
-    square.style.pointerEvents = 'none';
+    square.removeEventListener('click', this._changeShape);
     const clickedIdx =
       parseInt(square.dataset.row * 3) + parseInt(square.dataset.col);
     this.clickedBoxes[clickedIdx] = square;
@@ -85,7 +85,7 @@ class Board {
 
     // fire event to change player
     document.dispatchEvent(new CustomEvent('one-square-done'));
-    // TODO: MOVE THIS
+    //check winner
     const winner = this._checkWinner();
     if (winner != undefined) {
       console.log(winner);
