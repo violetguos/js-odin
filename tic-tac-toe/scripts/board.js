@@ -11,7 +11,7 @@ class Board {
     // declare vars
     this.availableBoxes = this._initBoxes();
     this.player = 'X';
-    this.ai = 'O';
+    this.ai = new Ai();
     this.clickedBoxes = {};
 
     // start game
@@ -81,10 +81,11 @@ class Board {
   }
 
   _aiMove() {
+    this.ai._checkConnectedTwo();
     const boxesDivs = app.board.availableBoxes;
     if (boxesDivs.length !== 0) {
       let chosen = boxesDivs[0];
-      chosen.textContent = 'O_AI';
+      chosen.textContent = 'O';
       this._removeSquare(chosen);
     }
   }
