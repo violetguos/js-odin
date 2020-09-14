@@ -88,12 +88,15 @@ class Board {
     //check winner
     const winner = this._checkWinner();
     if (winner != undefined) {
-      console.log(winner);
+      const result = document.querySelector('#result');
+      result.textContent = winner + ' won';
 
       // disbale all the boxes
       this._disableAllSquares();
-    } else if (winner === undefined && this.availableBoxes.length === 0)
-      console.log('tie!');
+    } else if (winner === undefined && this.availableBoxes.length === 0) {
+      const result = document.querySelector('#result');
+      result.textContent = 'TIE!';
+    }
   }
 
   _initBoxes() {

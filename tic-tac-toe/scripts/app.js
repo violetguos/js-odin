@@ -6,7 +6,8 @@ class App {
       for (const box of boxesDivs) {
         box.textContent = '';
       }
-
+      const result = document.querySelector('#result');
+      result.textContent = '';
       this.board = new Board();
       this.player = new Player();
     });
