@@ -11,10 +11,10 @@ class Player {
   }
   _alternate() {
     if (this.turn % 2) {
-      document.dispatchEvent(new CustomEvent('next-square', { detail: 'O' }));
-    } else {
       document.dispatchEvent(new CustomEvent('next-square', { detail: 'X' }));
+    } else {
+      this._ai();
     }
-    this.turn += 1;
+    console.log('this.trun', this.turn);
   }
 }

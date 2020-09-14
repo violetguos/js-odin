@@ -5,21 +5,21 @@ class Board {
     this._checkWinner = this._checkWinner.bind(this);
     this._changeShape = this._changeShape.bind(this);
     this._initBoxes = this._initBoxes.bind(this);
-    this._determinePlayer = this._determinePlayer.bind(this);
     this._disableAllSquares = this._disableAllSquares.bind(this);
+    this._removeSquare = this._removeSquare.bind(this);
+    this._aiMove = this._aiMove.bind(this);
     // declare vars
     this.availableBoxes = this._initBoxes();
-
+    this.player = 'X';
+    this.ai = 'O';
     this.clickedBoxes = {};
 
     // start game
     this._enableAllSquares();
-
-    // always listen to the alternator
-    document.addEventListener('next-square', this._determinePlayer);
   }
 
   _enableAllSquares() {
+    console.log('enable squares');
     const boxesDivs = document.querySelectorAll('#square');
     for (const box of boxesDivs) {
       box.addEventListener('click', this._changeShape);
@@ -66,11 +66,7 @@ class Board {
     if (winner != undefined) return winner;
   }
 
-  _changeShape(event) {
-    // change the text content of a square
-    const square = event.currentTarget;
-    square.textContent = this.player;
-
+  _removeSquare(square) {
     // disable clicking after one player's move
     square.removeEventListener('click', this._changeShape);
     const clickedIdx =
@@ -82,12 +78,26 @@ class Board {
     if (index > -1) {
       this.availableBoxes.splice(index, 1);
     }
+  }
 
+  _aiMove() {
+    const boxesDivs = app.board.availableBoxes;
+    if (boxesDivs.length !== 0) {
+      let chosen = boxesDivs[0];
+      chosen.textContent = 'O_AI';
+      this._removeSquare(chosen);
+    }
+  }
+
+  _changeShape(event) {
+    // change the text content of a square
+    const square = event.currentTarget;
+    square.textContent = this.player;
+    this._removeSquare(square);
     // fire event to change player
-    document.dispatchEvent(new CustomEvent('one-square-done'));
     //check winner
     const winner = this._checkWinner();
-    if (winner != undefined) {
+    if (winner !== undefined) {
       const result = document.querySelector('#result');
       result.textContent = winner + ' won';
 
@@ -96,6 +106,8 @@ class Board {
     } else if (winner === undefined && this.availableBoxes.length === 0) {
       const result = document.querySelector('#result');
       result.textContent = 'TIE!';
+    } else {
+      this._aiMove();
     }
   }
 
@@ -106,9 +118,5 @@ class Board {
     // Convert buttons NodeList to an array
     const btnsArr = Array.prototype.slice.call(btns);
     return btnsArr;
-  }
-
-  _determinePlayer(event) {
-    this.player = event.detail;
   }
 }
