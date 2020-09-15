@@ -81,7 +81,7 @@ class Board {
   }
 
   _aiMove() {
-    this.ai._checkConnectedTwo();
+    this.ai._checkDiag();
     const boxesDivs = app.board.availableBoxes;
     if (boxesDivs.length !== 0) {
       let chosen = boxesDivs[0];
