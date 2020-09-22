@@ -2,6 +2,9 @@ class Ai {
   constructor() {
     this._checkConnectedTwo = this._checkConnectedTwo.bind(this);
     this._upSert = this._upSert.bind(this);
+    this._checkDiag = this._checkDiag.bind(this);
+    this._convertIndexToColRow = this._convertIndexToColRow.bind(this);
+    this._checkTwo = this._checkTwo.bind(this);
   }
 
   _upSert(obj, key) {
@@ -9,84 +12,68 @@ class Ai {
     else obj[key] = 1;
   }
 
-  _checkDiag() {
-    // testing on 048 only
-    let row = undefined;
-    let col = undefined;
-    const connectedDiag048 = {};
-    let connectedDiag246 = 0;
-    for (let key in app.board.clickedBoxes) {
-      const box = app.board.clickedBoxes[key];
-      if (box.textContent === 'X') {
-        if (box.dataset.col === '0' && box.dataset.row === '0') {
-          this._upSert(connectedDiag048, '0');
-        } else if (box.dataset.col === '1' && box.dataset.row === '1') {
-          this._upSert(connectedDiag048, '4');
+  // TODO
+  // check any two of three are filled and return the unfilled
+
+  _checkTwo(s1, s2, s3) {
+    const arr = [s1, s2, s3];
+    let count = 0;
+
+    for (const b of arr) {
+      if (app.board.clickedBoxes[b] !== undefined) {
+        if (app.board.clickedBoxes[b].textContent === 'X') {
+          count += 1;
         }
       }
     }
-    console.log('connected048', connectedDiag048);
+    return count === 2 ? arr : undefined;
+  }
 
-    // find the available index in diag 048
-    let index;
-    const keys = ['0', '4', '8'];
-    for (const key of keys) {
-      if (!connectedDiag048[key]) index = key;
+  _checkDiag() {
+    let winner;
+    for (let i = 0; i < 3; i++) {
+      winner = this._checkTwo(i * 3, i * 3 + 1, i * 3 + 2);
+      if (winner !== undefined) return winner;
     }
+    for (let i = 0; i < 3; i++) {
+      winner = this._checkTwo(i, i + 3, i + 6);
+      if (winner !== undefined) return winner;
+    }
+    winner = this._checkTwo(0, 4, 8);
+    if (winner !== undefined) return winner;
+    winner = this._checkTwo(2, 4, 6);
 
-    // convert to row and col
-    row = Math.floor(index / 3);
-    col = index % 3;
+    if (winner !== undefined) {
+      return winner;
+    }
+  }
 
-    console.log('check diag', index, row, col);
+  _convertIndexToColRow(i) {
+    const index = parseInt(i);
+
+    const row = Math.floor(index / 3);
+    const col = Math.floor(index % 3);
+
+    return [row, col];
   }
 
   _checkConnectedTwo() {
-    const connectedTwoCols = {};
-    const connectedTwoRows = {};
-    for (let key in app.board.clickedBoxes) {
-      const box = app.board.clickedBoxes[key];
-      if (box.textContent === 'X') {
-        this._upSert(connectedTwoRows, box.dataset.row);
-        this._upSert(connectedTwoCols, box.dataset.col);
+    const spotInThree = this._checkDiag();
+    if (spotInThree !== undefined) {
+      let availableSpot = undefined;
+      for (const b of spotInThree) {
+        if (app.board.clickedBoxes[b] === undefined) availableSpot = b;
+      }
+      if (availableSpot !== undefined) {
+        const coord = this._convertIndexToColRow(availableSpot);
+        const row = coord[0].toString();
+        const col = coord[1].toString();
+        const chosenDiv = document.querySelector(
+          `#square[data-col="${col}"][data-row="${row}"]`
+        );
+        return chosenDiv;
       }
     }
-    let row = undefined;
-    let col = undefined;
-
-    for (let key in connectedTwoCols) {
-      if (connectedTwoCols[key] >= 2) {
-        col = key;
-      }
-    }
-    for (let key in connectedTwoRows) {
-      if (connectedTwoRows[key] >= 2) {
-        row = key;
-      }
-    }
-
-    // check all possible scenaarios
-
-    if (row === undefined && col !== undefined) {
-      for (const box of app.board.availableBoxes) {
-        if (box.dataset.col === col) {
-          row = box.dataset.row;
-        }
-      }
-    } else if (row !== undefined && col === undefined) {
-      for (const box of app.board.availableBoxes) {
-        if (box.dataset.row === row) {
-          col = box.dataset.col;
-        }
-      }
-    } else if (row === undefined && col === undefined) {
-      row = app.board.availableBoxes[0].dataset.row;
-      col = app.board.availableBoxes[0].dataset.col;
-    }
-
-    const chosenDiv = document.querySelector(
-      `#square[data-col="${col}"][data-row="${row}"]`
-    );
-    console.log(chosenDiv, col, row);
+    return undefined;
   }
 }

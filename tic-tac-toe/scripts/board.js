@@ -8,6 +8,10 @@ class Board {
     this._disableAllSquares = this._disableAllSquares.bind(this);
     this._removeSquare = this._removeSquare.bind(this);
     this._aiMove = this._aiMove.bind(this);
+    this._postOMove = this._postOMove.bind(this);
+    this._postXMove = this._postXMove.bind(this);
+    this._isGameOver = this._isGameOver.bind(this);
+
     // declare vars
     this.availableBoxes = this._initBoxes();
     this.player = 'X';
@@ -16,6 +20,9 @@ class Board {
 
     // start game
     this._enableAllSquares();
+
+    document.addEventListener('x-move', this._postXMove);
+    document.addEventListener('o-move', this._postOMove);
   }
 
   _enableAllSquares() {
@@ -31,6 +38,35 @@ class Board {
     for (const box of boxesDivs) {
       box.removeEventListener('click', this._changeShape);
     }
+  }
+
+  _postXMove() {
+    const over = this._isGameOver();
+    if (!over) this._aiMove();
+  }
+
+  _postOMove() {
+    const over = this._isGameOver();
+  }
+
+  _isGameOver() {
+    // fire event to change player
+    //check winner
+    let over = false;
+    const winner = this._checkWinner();
+    if (winner !== undefined && winner !== null) {
+      const result = document.querySelector('#result');
+      result.textContent = winner + ' won';
+
+      // disbale all the boxes
+      this._disableAllSquares();
+      over = true;
+    } else if (winner === undefined && this.availableBoxes.length === 0) {
+      const result = document.querySelector('#result');
+      result.textContent = 'TIE!';
+      over = true;
+    }
+    return over;
   }
 
   _checkSquares(s1, s2, s3) {
@@ -54,16 +90,16 @@ class Board {
     // check rows
     for (let i = 0; i < 3; i++) {
       winner = this._checkSquares(i * 3, i * 3 + 1, i * 3 + 2);
-      if (winner != undefined) return winner;
+      if (winner !== undefined) return winner;
     }
     for (let i = 0; i < 3; i++) {
       winner = this._checkSquares(i, i + 3, i + 6);
-      if (winner != undefined) return winner;
+      if (winner !== undefined) return winner;
     }
     winner = this._checkSquares(0, 4, 8);
-    if (winner != undefined) return winner;
+    if (winner !== undefined) return winner;
     winner = this._checkSquares(2, 4, 6);
-    if (winner != undefined) return winner;
+    if (winner !== undefined) return winner;
   }
 
   _removeSquare(square) {
@@ -72,44 +108,37 @@ class Board {
     const clickedIdx =
       parseInt(square.dataset.row * 3) + parseInt(square.dataset.col);
     this.clickedBoxes[clickedIdx] = square;
-
     // remove from available
     const index = this.availableBoxes.indexOf(square);
+
     if (index > -1) {
       this.availableBoxes.splice(index, 1);
     }
   }
 
   _aiMove() {
-    this.ai._checkDiag();
-    const boxesDivs = app.board.availableBoxes;
-    if (boxesDivs.length !== 0) {
-      let chosen = boxesDivs[0];
-      chosen.textContent = 'O';
-      this._removeSquare(chosen);
+    let chosen;
+
+    const possibleDiv = this.ai._checkConnectedTwo();
+    if (possibleDiv !== undefined && possibleDiv !== null) {
+      chosen = possibleDiv;
+    } else if (app.board.availableBoxes.length !== 0) {
+      chosen = app.board.availableBoxes[0];
     }
+
+    chosen.textContent = 'O';
+
+    this._removeSquare(chosen);
+    document.dispatchEvent(new CustomEvent('o-move'));
   }
 
   _changeShape(event) {
+    // X's move
     // change the text content of a square
     const square = event.currentTarget;
     square.textContent = this.player;
     this._removeSquare(square);
-    // fire event to change player
-    //check winner
-    const winner = this._checkWinner();
-    if (winner !== undefined) {
-      const result = document.querySelector('#result');
-      result.textContent = winner + ' won';
-
-      // disbale all the boxes
-      this._disableAllSquares();
-    } else if (winner === undefined && this.availableBoxes.length === 0) {
-      const result = document.querySelector('#result');
-      result.textContent = 'TIE!';
-    } else {
-      this._aiMove();
-    }
+    document.dispatchEvent(new CustomEvent('x-move'));
   }
 
   _initBoxes() {
