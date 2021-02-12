@@ -1,4 +1,4 @@
-function tabContent(){
+function tabDivs(){
   const divTab = document.createElement("div");
   divTab.classList.add("tab");
 
@@ -11,27 +11,32 @@ function tabContent(){
   return divTab;
 }
 
-const tabPopulate = (() =>{
-  const contentDiv = document.querySelector("#tabsy");
-  
-  const contentTab = tabContent();
-
+function tabContent(){
   const header = document.createElement("header");
   const h1 = document.createElement("h1");
   const head_content = document.createTextNode("pizza academy");
   h1.appendChild(head_content);
   header.appendChild(h1);
-  contentTab.appendChild(header);
 
   const paragraph = document.createElement("p");
   const pDiv = document.createTextNode("the best");
   paragraph.appendChild(pDiv);
-  contentTab.appendChild(paragraph);
 
   const img = document.createElement("img");
   img.src = "img/restaurant.jpg"; 
-  contentDiv.appendChild(img);
-  contentTab.appendChild(contentDiv);
+
+  return [h1, header, paragraph, img];
+}
+
+const tabPopulate = (() =>{
+  const contentDiv = document.querySelector(".tabsy");
+  const divTab = tabDivs();
+
+  const contentTab = tabContent();
+  for(var i = 0; i<contentTab.length; i++)
+    divTab.appendChild(contentTab[i]);
+  contentDiv.appendChild(divTab);
+
 })();
 
 export {tabPopulate};
