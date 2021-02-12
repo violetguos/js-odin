@@ -24,7 +24,7 @@ function tabContent(){
 
   const img = document.createElement("img");
   img.src = "img/restaurant.jpg"; 
-
+  
   return [h1, header, paragraph, img];
 }
 
