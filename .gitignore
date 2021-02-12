@@ -1,3 +1,6 @@
+# only for debugging
+!resto/dist
+
 # Logs
 logs
 *.log

@@ -40,4 +40,4 @@ const tab = (() => {
   })();
 
 
-  export {tab};
+  export { tab };
