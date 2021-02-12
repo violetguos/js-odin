@@ -1,14 +1,8 @@
 function tabDivs(){
-  const divTab = document.createElement("div");
-  divTab.classList.add("tab");
-
-
   const divContent = document.createElement("div");
   divContent.classList.add("content");
   divContent.id="resto";
-
-  divTab.appendChild(divContent);
-  return divTab;
+  return divContent;
 }
 
 function tabContent(){
@@ -28,15 +22,15 @@ function tabContent(){
   return [h1, header, paragraph, img];
 }
 
-const tabPopulate = (() =>{
-  const contentDiv = document.querySelector(".tabsy");
+function tabPopulate(parentDiv){
   const divTab = tabDivs();
 
   const contentTab = tabContent();
-  for(var i = 0; i<contentTab.length; i++)
+  for(let i = 0; i<contentTab.length; i++)
     divTab.appendChild(contentTab[i]);
-  contentDiv.appendChild(divTab);
+  
+  parentDiv.appendChild(divTab);
 
-})();
+}
 
 export {tabPopulate};

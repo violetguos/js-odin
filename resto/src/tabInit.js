@@ -1,3 +1,5 @@
+import { tabPopulate} from './tabPopulate.js';
+
 const tabFactory = (title, id) => {
     
     const inputTab1 = document.createElement("input");
@@ -8,25 +10,37 @@ const tabFactory = (title, id) => {
 
     const label = document.createElement("label");
     label.setAttribute("class", "tabButton");
-    label.setAttribute("for", "tab1");
+    label.setAttribute("for", "tab"+id);
     const label_content = document.createTextNode(title);
     label.appendChild(label_content);
+
+    const divTab = document.createElement("div");
+    divTab.classList.add("tab");
+    divTab.setAttribute("id", "tab"+id);
+    tabPopulate(divTab);
+
     
-    return [inputTab1, label];
+    return [inputTab1, label, divTab];
 }; 
 
 const tab = (() => {
     const contentDiv = document.querySelector("#content");
     const divElement = document.createElement("div");
     divElement.classList.add("tabsy");
-
     const tab1 = tabFactory("Resto", 1);
-    // const tab2 = tabFactory("Contact", 1);
 
     for(let i=0; i<tab1.length; i++){
         divElement.appendChild(tab1[i]);
     }
+
+    const tab2 = tabFactory("Contact", 2);
+    for(let i=0; i<tab2.length; i++){
+        divElement.appendChild(tab2[i]);
+    }
+
     contentDiv.appendChild(divElement);
+
+
 })();
 
 
