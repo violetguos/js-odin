@@ -19,4 +19,4 @@ const initLoad = (() =>{
   contentDiv.appendChild(img);
 })();
 
-export default initLoad;
+export {initLoad};

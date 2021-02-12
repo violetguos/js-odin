@@ -1,3 +1,16 @@
+function tabContent(){
+    const divTab = document.createElement("div");
+    divTab.classList.add("tab");
+
+
+    const divContent = document.createElement("div");
+    divContent.classList.add("content");
+    divContent.id="resto";
+
+    divTab.appendChild(divContent);
+    return divTab;
+}
+
 const tab = (() => {
     const contentDiv = document.querySelector("#content");
     
@@ -16,12 +29,15 @@ const tab = (() => {
     const label_content = document.createTextNode("Resto");
     label.appendChild(label_content);
 
+    const divContent = tabContent();
 
 
     divElement.appendChild(inputTab1);
     divElement.appendChild(label);
+    divElement.appendChild(divContent);
     contentDiv.appendChild(divElement);
     
   })();
-  
+
+
   export {tab};
