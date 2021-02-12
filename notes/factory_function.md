@@ -80,6 +80,14 @@ const module_name = (() => {
 })();
 ```
 
+or 
+```javascript
+var myModule = (function(){
+  // more functions
+  // more vars
+})();
+```
+
 8. Describe IIFE. What does it stand for?
 - Immediately Invoked Function Expression
 - with the trailing `()`, it immediately executes
