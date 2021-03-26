@@ -17,7 +17,7 @@ const tabFactory = (title, id) => {
     const divTab = document.createElement("div");
     divTab.classList.add("tab");
     divTab.setAttribute("id", "tab"+id);
-    tabPopulate(divTab);
+    tabPopulate(divTab, id);
 
     
     return [inputTab1, label, divTab];
